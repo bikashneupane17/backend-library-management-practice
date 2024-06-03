@@ -58,3 +58,14 @@ export const newBookValidate = (req, res, next) => {
 
   return JoiValidate(schema, req, res, next);
 };
+
+export const newBurrowValidate = (req, res, next) => {
+  const schema = Joi.object({
+    userId: STRING_REQUIRED,
+    bookId: STRING_REQUIRED,
+    thumbnail: STRING_ALLOWED,
+    isReturned: STRING_ALLOWED,
+  });
+
+  return JoiValidate(schema, req, res, next);
+};

@@ -11,7 +11,6 @@ export const auth = async (req, res, next) => {
 
     //2. verify if the accessJWT is valid by decoding, not expired, using secrete key
     const decoded = verifyAccessJWT(authorization);
-    console.log(typeof decoded);
 
     //3. if verified, fing the token in DB, using the accessJWT from authorization
     if (decoded?.email) {
@@ -82,14 +81,11 @@ export const jwtAuth = async (req, res, next) => {
 };
 
 export const isAdmin = (req, res, next) => {
-  try {
-    req.userInfo.role === "admin"
-      ? next()
-      : res.status(403).json({
-          status: "error",
-          message: "Unauthorised, Access Denied",
-        });
-  } catch (error) {
-    next(error);
-  }
+  console.log(req.userInfo.role);
+  req.userInfo.role === "admin"
+    ? next()
+    : next({
+        status: 403,
+        message: "Unauthorized, Access Denied",
+      });
 };

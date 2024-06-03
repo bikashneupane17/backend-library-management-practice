@@ -1,4 +1,5 @@
 import bookRouter from "./src/router/bookRouter.js";
+import burrowRouter from "./src/router/burrowRouter.js";
 import { connectMongo } from "./src/config/mongoConfig.js";
 import cors from "cors";
 import express from "express";
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("/library/users", userRouter);
 app.use("/library/users/private", privateRouter);
 app.use("/library/books", bookRouter);
+app.use("/library/burrows", burrowRouter);
 
 //server route
 app.use("/", (req, res, next) => {

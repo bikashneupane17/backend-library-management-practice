@@ -6,7 +6,7 @@ import { updateUserInDB } from "../model/user/UserModel.js";
 // payload has a string, and we are destructuring
 export const signAccessJWT = ({ email }) => {
   const accessJWT = jwt.sign({ email }, process.env.ACCESS_JWT_PRIVATE_KEY, {
-    expiresIn: "1m",
+    expiresIn: "10m",
   });
 
   addAccessTokenToDB({ accessJWT });

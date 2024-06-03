@@ -1,5 +1,6 @@
 import {
   addNewBookToDB,
+  deleteBookById,
   editBookInDB,
   getAllBooksFromDB,
   getBookById,
@@ -15,7 +16,7 @@ const bookRouter = express.Router();
 bookRouter.post("/", auth, isAdmin, newBookValidate, async (req, res, next) => {
   try {
     const newBook = await addNewBookToDB(req.body);
-    console.log(newBook);
+
     newBook?._id
       ? res.json({
           status: "success",
@@ -38,7 +39,6 @@ bookRouter.post("/", auth, isAdmin, newBookValidate, async (req, res, next) => {
 bookRouter.get("/all", async (req, res, next) => {
   try {
     const books = await getAllBooksFromDB();
-    console.log(books);
     res.json({
       status: "success",
       books,
@@ -87,6 +87,26 @@ bookRouter.put("/", auth, isAdmin, async (req, res, next) => {
 });
 
 // delete book === admin access
-bookRouter.delete("/", (req, res) => {});
+bookRouter.delete("/:_id?", auth, isAdmin, async (req, res, next) => {
+  try {
+    const { _id } = req.params;
+
+    const deletedBook = await deleteBookById(_id);
+    console.log(_id, result);
+    console.log("first");
+
+    deletedBook?._id
+      ? res.json({
+          status: "success",
+          message: "Book Deleted",
+        })
+      : res.json({
+          status: "error",
+          message: "Delete Request failed, try again....",
+        });
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default bookRouter;

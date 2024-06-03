@@ -22,8 +22,8 @@ export const editBookInDB = (_id, updateObj) => {
 };
 
 //delete books by id(s)
-export const deleteBookByIds = (_id) => {
-  return BookSchema.findOneAndDelete(_id);
+export const deleteBookById = (_id) => {
+  return BookSchema.findByIdAndDelete({ _id });
 };
 
 // //delete book

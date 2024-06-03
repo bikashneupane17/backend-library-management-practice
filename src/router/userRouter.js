@@ -1,5 +1,5 @@
-import { addNewUserToDB, findUserByEmail } from "../model/user/UserModel.js";
 import { comparePassword, hashPassword } from "../utils/bcrypt.js";
+import { createNewUser, getUserByEmail } from "../model/user/UserModel.js";
 import {
   loginUserValidate,
   newUserValidate,
@@ -16,7 +16,7 @@ userRouter.post("/signup", newUserValidate, async (req, res, next) => {
   try {
     req.body.password = hashPassword(req.body.password);
 
-    const user = await addNewUserToDB(req.body);
+    const user = await createNewUser(req.body);
 
     user?._id
       ? res.json({
@@ -41,7 +41,7 @@ userRouter.post("/login", loginUserValidate, async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    const user = await findUserByEmail(email);
+    const user = await getUserByEmail(email);
 
     if (user?._id) {
       const isPassword = comparePassword(password, user.password);

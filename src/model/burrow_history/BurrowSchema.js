@@ -12,6 +12,14 @@ const burrowSchema = new mongoose.Schema(
       ref: "Books",
       required: true,
     },
+    userName: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
+    bookTitle: {
+      type: String,
+      required: true,
+    },
     thumbnail: {
       type: String,
       default: "",

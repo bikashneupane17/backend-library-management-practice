@@ -1,7 +1,7 @@
 import { verifyAccessJWT, verifyRefreshJWT } from "../utils/jwt.js";
 
 import { findAccessJWTInDb } from "../model/session/SessionModel.js";
-import { findUserByEmail } from "../model/user/UserModel.js";
+import { getUserByEmail } from "../model/user/UserModel.js";
 
 // authenticate access jwt and send userInfo
 export const auth = async (req, res, next) => {
@@ -18,7 +18,7 @@ export const auth = async (req, res, next) => {
 
       // 4. if token is present in the session table in DB, use the token to get user
       if (tokenObj?._id) {
-        const user = await findUserByEmail(decoded.email);
+        const user = await getUserByEmail(decoded.email);
 
         //5. if user is present send it as req.userInfo and go to next
         if (user?._id) {
@@ -55,7 +55,7 @@ export const jwtAuth = async (req, res, next) => {
     // 3. check of token is present in db
     if (decoded?.email) {
       //4. using email from decode find user
-      const user = await findUserByEmail(decoded.email);
+      const user = await getUserByEmail(decoded.email);
 
       // if user is present and the token matches, send new accessToken
       if (user?._id && user.refreshJWT === authorization) {

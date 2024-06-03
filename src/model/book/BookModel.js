@@ -1,32 +1,26 @@
 import BookSchema from "./BookSchema.js";
 
-//insert new book
-export const addNewBookToDB = (bookObj) => {
-  return BookSchema(bookObj).save();
+// insert
+export const insertBook = (obj) => {
+  return BookSchema(obj).save();
 };
 
-// read all books
-export const getAllBooksFromDB = (filter) => {
+//Read all for the admin || public
+export const getAllBooks = (filter) => {
   return BookSchema.find(filter);
 };
 
-//get book by id
-export const getBookById = (_id) => {
-  console.log(_id);
+// get book by Id
+export const getABookById = (_id) => {
   return BookSchema.findById(_id);
 };
 
-//edit book
-export const editBookInDB = (_id, updateObj) => {
-  return BookSchema.findByIdAndUpdate(_id, updateObj);
+// update book by id
+export const updateABookById = (_id, obj) => {
+  return BookSchema.findByIdAndUpdate(_id, obj);
 };
 
-//delete books by id(s)
-export const deleteBookById = (_id) => {
-  return BookSchema.findByIdAndDelete({ _id });
+//delete book by id
+export const deleteABookById = (_id) => {
+  return BookSchema.findByIdAndDelete(_id);
 };
-
-// //delete book
-// export const deleteBookInDB = (ids) => {
-//   return BookSchema.deleteMany({ _id: { $in: ids } });
-// };

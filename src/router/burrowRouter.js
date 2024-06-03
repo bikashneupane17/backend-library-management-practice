@@ -1,55 +1,49 @@
-import { auth, isAdmin } from "../middlewares/auth.js";
-import {
-  newBookValidate,
-  newBurrowValidate,
-} from "../middlewares/joiValidation.js";
-
-import { editBookInDB } from "../model/book/BookModel.js";
 import express from "express";
+import { insertBurrow } from "../model/burrow_history/BurrowModel.js";
+import { newBurrowValidate } from "../middlewares/joiValidation.js";
+import { updateABookById } from "../model/book/BookModel.js";
+
+const router = express.Router();
 
 const maxBurrowingDays = 15;
 
-const burrowRouter = express.Router();
-
-//add new bowrrow === private
-burrowRouter.post("/", newBurrowValidate, async (req, res, next) => {
+// create new Burrow history
+router.post("/", newBurrowValidate, async (req, res, next) => {
   try {
-    const { _id, firstName } = req.userInfo;
-
-    const burrow = await addNewBurrowToDB({
+    const today = new Date();
+    const { _id, fName } = req.userInfo;
+    const burrow = await insertBurrow({
       ...req.body,
       userId: _id,
-      userName: firstName,
+      userName: fName,
     });
 
-    //if burrow successfully
-    //then => update the book table,isAvailable:false
+    //if burrow successfull
+    //then -> update the book table, isAvailable: false
+
     if (burrow) {
-      await editBookInDB(req.body.bookId, {
+      await updateABookById(req.body.bookId, {
         isAvailable: false,
+
         expectedAvailable: today.setDate(
           today.getDate() + maxBurrowingDays,
-          "days"
+          "day"
         ),
+      });
+
+      return res.json({
+        status: "success",
+        message: "This book now available in your account.",
       });
     }
 
-    burrow?._id
-      ? res.json({
-          status: "success",
-          message: "This book is now available in your account",
-        })
-      : res.json({
-          status: "error",
-          message: "Unable to burrow the book, try again...",
-        });
+    res.json({
+      status: "error",
+      message: "Unable to burrow the book, try agian later",
+    });
   } catch (error) {
-    if (error.message.includes("E11000 duplicate key")) {
-      error.message = "Another book with same ISBN already registered...";
-      error.status = 200;
-    }
     next(error);
   }
 });
 
-export default burrowRouter;
+export default router;

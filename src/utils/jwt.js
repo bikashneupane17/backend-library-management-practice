@@ -1,6 +1,6 @@
 import { addAccessTokenToDB } from "../model/session/SessionModel.js";
 import jwt from "jsonwebtoken";
-import { updateUserInDB } from "../model/user/UserModel.js";
+import { updateUser } from "../model/user/UserModel.js";
 
 //create access token
 // payload has a string, and we are destructuring
@@ -31,7 +31,7 @@ export const signRefreshJWT = ({ email }) => {
     expiresIn: "10d",
   });
 
-  updateUserInDB({ email }, { refreshJWT });
+  updateUser({ email }, { refreshJWT });
   return refreshJWT;
 };
 

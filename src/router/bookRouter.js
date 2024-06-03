@@ -1,11 +1,10 @@
-import {
-  addNewBookToDB,
-  deleteBookById,
-  editBookInDB,
-  getAllBooksFromDB,
-  getBookById,
-} from "../model/book/BookModel.js";
 import { auth, isAdmin } from "../middlewares/auth.js";
+import {
+  getABookById,
+  getAllBooks,
+  insertBook,
+  updateABookById,
+} from "../model/book/BookModel.js";
 
 import express from "express";
 import { newBookValidate } from "../middlewares/joiValidation.js";
@@ -15,7 +14,7 @@ const bookRouter = express.Router();
 //add new book === private
 bookRouter.post("/", auth, isAdmin, newBookValidate, async (req, res, next) => {
   try {
-    const newBook = await addNewBookToDB(req.body);
+    const newBook = await insertBook(req.body);
 
     newBook?._id
       ? res.json({
@@ -38,7 +37,7 @@ bookRouter.post("/", auth, isAdmin, newBookValidate, async (req, res, next) => {
 // get all books === private
 bookRouter.get("/all", async (req, res, next) => {
   try {
-    const books = await getAllBooksFromDB();
+    const books = await getAllBooks();
     res.json({
       status: "success",
       books,
@@ -54,8 +53,8 @@ bookRouter.get("/:_id?", async (req, res, next) => {
     const { _id } = req.params;
 
     const books = _id
-      ? await getBookById(_id)
-      : await getAllBooksFromDB({ status: "active" });
+      ? await getABookById(_id)
+      : await getAllBooks({ status: "active" });
 
     res.json({
       status: "success",
@@ -71,7 +70,7 @@ bookRouter.put("/", auth, isAdmin, async (req, res, next) => {
   try {
     const { _id, ...rest } = req.body;
 
-    const editedBook = await editBookInDB(_id, rest);
+    const editedBook = await updateABookById(_id, rest);
     editedBook?._id
       ? res.json({
           status: "success",

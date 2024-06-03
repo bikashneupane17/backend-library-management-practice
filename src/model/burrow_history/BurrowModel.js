@@ -1,32 +1,26 @@
 import BurrowSchema from "./BurrowSchema.js";
 
-//insert new Burrow
-export const addNewBurrowToDB = (BurrowObj) => {
-  return BurrowSchema(BurrowObj).save();
+// insert
+export const insertBurrow = (obj) => {
+  return BurrowSchema(obj).save();
 };
 
-// read all Burrows
-export const getAllBurrowsFromDB = (filter) => {
+//Read all for the admin || public
+export const getAllBurrows = (filter) => {
   return BurrowSchema.find(filter);
 };
 
-//get Burrow by id
-export const getBurrowById = (_id) => {
-  console.log(_id);
+// get burrow by Id
+export const getABurrowById = (_id) => {
   return BurrowSchema.findById(_id);
 };
 
-//edit Burrow
-export const editBurrowInDB = (_id, updateObj) => {
-  return BurrowSchema.findByIdAndUpdate(_id, updateObj);
+// update burrow by id
+export const updateABurrowById = (_id, obj) => {
+  return BurrowSchema.findByIdAndUpdate(_id, obj);
 };
 
-//delete Burrows by id(s)
-export const deleteBurrowById = (_id) => {
-  return BurrowSchema.findByIdAndDelete({ _id });
-};
-
-// //delete Burrow
-// export const deleteBurrowInDB = (ids) => {
-//   return BurrowSchema.deleteMany({ _id: { $in: ids } });
+//delete burrow by id
+// export const deleteABurrowById = (_id) => {
+//   return BurrowSchema.findByIdAndDelete(_id);
 // };

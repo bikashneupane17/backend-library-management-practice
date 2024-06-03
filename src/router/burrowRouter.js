@@ -1,3 +1,4 @@
+import { auth } from "../middlewares/auth.js";
 import express from "express";
 import { insertBurrow } from "../model/burrow_history/BurrowModel.js";
 import { newBurrowValidate } from "../middlewares/joiValidation.js";
@@ -8,14 +9,15 @@ const router = express.Router();
 const maxBurrowingDays = 15;
 
 // create new Burrow history
-router.post("/", newBurrowValidate, async (req, res, next) => {
+router.post("/", auth, newBurrowValidate, async (req, res, next) => {
   try {
+    console.log(req.userInfo);
     const today = new Date();
-    const { _id, fName } = req.userInfo;
+    const { _id, firstName } = req.userInfo;
     const burrow = await insertBurrow({
       ...req.body,
       userId: _id,
-      userName: fName,
+      userName: firstName,
     });
 
     //if burrow successfull

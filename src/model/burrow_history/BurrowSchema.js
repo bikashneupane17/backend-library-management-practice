@@ -13,7 +13,7 @@ const burrowSchema = new mongoose.Schema(
       required: true,
     },
     userName: {
-      type: mongoose.Types.ObjectId,
+      type: String,
       required: true,
     },
     bookTitle: {

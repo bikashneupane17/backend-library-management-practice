@@ -3,13 +3,12 @@ import Joi from "joi";
 const STRING = Joi.string();
 const STRING_REQUIRED = Joi.string().required();
 const STRING_ALLOWED = Joi.string().allow("", null);
-
 const NUMBER = Joi.number();
 const NUMBER_REQUIRED = Joi.number().required();
-
 const EMAIL = Joi.string().email({
   minDomainSegments: 2,
 });
+const isTRUE = Joi.boolean().allow(null);
 
 export const JoiValidate = (schema, req, res, next) => {
   try {
@@ -82,6 +81,8 @@ export const updateBookValidation = (req, res, next) => {
     thumbnail: STRING_REQUIRED,
     publishedYear: NUMBER,
     description: STRING_REQUIRED,
+    isAvailable: isTRUE,
+    expectedAvailable: Joi.date().allow(null, ""),
   });
   return JoiValidate({ req, res, next, schema });
 };

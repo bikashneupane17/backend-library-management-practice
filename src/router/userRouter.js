@@ -40,7 +40,6 @@ userRouter.post("/signup", newUserValidate, async (req, res, next) => {
 userRouter.post("/login", loginUserValidate, async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
     const user = await getUserByEmail(email);
 
     if (user?._id) {
@@ -48,7 +47,6 @@ userRouter.post("/login", loginUserValidate, async (req, res, next) => {
 
       if (isPassword) {
         user.password = undefined;
-
         return res.json({
           status: "success",
           message: "User Login Success",
@@ -58,12 +56,12 @@ userRouter.post("/login", loginUserValidate, async (req, res, next) => {
           },
         });
       }
-
-      res.json({
-        status: "error",
-        message: "Incorrect Login Credential...",
-      });
     }
+
+    res.json({
+      status: "error",
+      message: "Incorrect Login Credential...",
+    });
   } catch (error) {
     next(error);
   }

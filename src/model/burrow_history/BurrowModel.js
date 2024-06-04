@@ -17,10 +17,6 @@ export const getABurrowById = (_id) => {
 
 // update burrow by id
 export const updateABurrowById = (_id, obj) => {
+  console.log("BMMMM");
   return BurrowSchema.findByIdAndUpdate(_id, obj);
 };
-
-//delete burrow by id
-// export const deleteABurrowById = (_id) => {
-//   return BurrowSchema.findByIdAndDelete(_id);
-// };

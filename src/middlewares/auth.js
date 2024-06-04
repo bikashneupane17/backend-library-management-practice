@@ -8,6 +8,7 @@ export const auth = async (req, res, next) => {
   try {
     //1. destructure authorization (contains accessJWT) from reqheader
     const { authorization } = req.headers;
+    console.log(authorization);
 
     //2. verify if the accessJWT is valid by decoding, not expired, using secrete key
     const decoded = verifyAccessJWT(authorization);
@@ -48,6 +49,7 @@ export const jwtAuth = async (req, res, next) => {
   try {
     // 1. get refreshToken from req.header
     const { authorization } = req.headers;
+    console.log(authorization, "jwt");
 
     // 2. verify the refresh token
     const decoded = verifyRefreshJWT(authorization);

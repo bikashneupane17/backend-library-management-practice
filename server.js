@@ -1,3 +1,4 @@
+import { auth } from "./src/middlewares/auth.js";
 import bookRouter from "./src/router/bookRouter.js";
 import burrowRouter from "./src/router/burrowRouter.js";
 import { connectMongo } from "./src/config/mongoConfig.js";
@@ -18,7 +19,7 @@ app.use(express.json());
 app.use("/library/users", userRouter);
 app.use("/library/users/private", privateRouter);
 app.use("/library/books", bookRouter);
-app.use("/library/burrows", burrowRouter);
+app.use("/library/burrows", auth, burrowRouter);
 
 //server route
 app.use("/", (req, res, next) => {
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 
 //global error handler
 app.use((error, req, res, next) => {
+  console.log(error);
   res.status(error.status || 500).json({
     status: "error",
     message: error.message,

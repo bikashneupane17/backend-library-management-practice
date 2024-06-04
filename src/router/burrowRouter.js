@@ -1,6 +1,11 @@
+import {
+  getAllBurrows,
+  insertBurrow,
+  updateABurrowById,
+} from "../model/burrow_history/BurrowModel.js";
+
 import { auth } from "../middlewares/auth.js";
 import express from "express";
-import { insertBurrow } from "../model/burrow_history/BurrowModel.js";
 import { newBurrowValidate } from "../middlewares/joiValidation.js";
 import { updateABookById } from "../model/book/BookModel.js";
 
@@ -8,16 +13,23 @@ const router = express.Router();
 
 const maxBurrowingDays = 15;
 
-// create new Burrow history
-router.post("/", auth, newBurrowValidate, async (req, res, next) => {
+// create new burrow
+router.post("/", newBurrowValidate, async (req, res, next) => {
   try {
     console.log(req.userInfo);
     const today = new Date();
     const { _id, firstName } = req.userInfo;
+
+    const expectedAvailable = today.setDate(
+      today.getDate() + maxBurrowingDays,
+      "day"
+    );
+
     const burrow = await insertBurrow({
       ...req.body,
       userId: _id,
       userName: firstName,
+      dueDate: expectedAvailable,
     });
 
     //if burrow successfull
@@ -26,11 +38,7 @@ router.post("/", auth, newBurrowValidate, async (req, res, next) => {
     if (burrow) {
       await updateABookById(req.body.bookId, {
         isAvailable: false,
-
-        expectedAvailable: today.setDate(
-          today.getDate() + maxBurrowingDays,
-          "day"
-        ),
+        expectedAvailable,
       });
 
       return res.json({
@@ -42,6 +50,64 @@ router.post("/", auth, newBurrowValidate, async (req, res, next) => {
     res.json({
       status: "error",
       message: "Unable to burrow the book, try agian later",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// get my burrows
+router.get("/", async (req, res, next) => {
+  try {
+    const { _id, role } = req.userInfo;
+    const filter = role === "admin" ? null : { userId: _id };
+
+    const burrows = (await getAllBurrows(filter)) || [];
+
+    console.log(burrows);
+    res.json({
+      status: "success",
+      message: "",
+      burrows,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/", async (req, res, next) => {
+  try {
+    console.log(req.body);
+
+    if (!req.body._id || !req.body.bookId) {
+      throw new Error("Invalid Data");
+    }
+
+    const burrowId = req.body._id;
+    // const { _id } = req.user.Info;
+
+    // udate burrow table
+    const burrow = await updateABurrowById(burrowId, {
+      isReturned: true,
+      returnedDate: Date(),
+    });
+
+    //update book tab;e
+    const book = await updateABookById(req.body.bookId, {
+      isAvailable: true,
+      expectedAvailable: null,
+    });
+
+    if (burrow?._id && book?._id) {
+      return res.json({
+        status: "success",
+        message: "You have successfully returned the book",
+      });
+    }
+
+    res.json({
+      status: "error",
+      message: "Unable to return book, please contact administration.",
     });
   } catch (error) {
     next(error);

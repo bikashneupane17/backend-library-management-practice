@@ -7,6 +7,7 @@ import express from "express";
 import morgan from "morgan";
 import privateRouter from "./src/router/privateRouter.js";
 import userRouter from "./src/router/userRouter.js";
+import reviewRouter from "./src/router/reviewRouter.js";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use("/library/users", userRouter);
 app.use("/library/users/private", privateRouter);
 app.use("/library/books", bookRouter);
 app.use("/library/burrows", auth, burrowRouter);
+app.use("/library/books/review", auth, reviewRouter);
 
 //server route
 app.use("/", (req, res, next) => {
@@ -37,7 +39,6 @@ app.use((req, res, next) => {
 
 //global error handler
 app.use((error, req, res, next) => {
-  console.log(error);
   res.status(error.status || 500).json({
     status: "error",
     message: error.message,

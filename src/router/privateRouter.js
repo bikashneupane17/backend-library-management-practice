@@ -26,7 +26,6 @@ privateRouter.get("/", auth, (req, res, next) => {
 privateRouter.get("/new-access", jwtAuth, (req, res, next) => {
   try {
     const { email } = req.userInfo;
-    console.log(email);
     const accessJWT = signAccessJWT({ email });
 
     res.json({ accessJWT });

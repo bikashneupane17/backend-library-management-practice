@@ -59,7 +59,6 @@ export const newBookValidate = (req, res, next) => {
 };
 
 // ============= Burrow validation
-
 export const newBurrowValidate = (req, res, next) => {
   const schema = Joi.object({
     bookId: STRING_REQUIRED,
@@ -71,7 +70,6 @@ export const newBurrowValidate = (req, res, next) => {
 };
 
 // update Book Validation
-
 export const updateBookValidation = (req, res, next) => {
   const schema = Joi.object({
     _id: STRING_REQUIRED,
@@ -85,4 +83,19 @@ export const updateBookValidation = (req, res, next) => {
     expectedAvailable: Joi.date().allow(null, ""),
   });
   return JoiValidate({ req, res, next, schema });
+};
+
+// review validation
+export const newReviewValidation = (req, res, next) => {
+  const schema = Joi.object({
+    bookId: STRING_REQUIRED,
+    bookTitle: STRING_REQUIRED,
+    burrowId: STRING_REQUIRED,
+    message: STRING_REQUIRED,
+    ratings: NUMBER_REQUIRED,
+    tilte: STRING_REQUIRED,
+    userId: STRING_REQUIRED,
+    userName: STRING_REQUIRED,
+  });
+  return joiValidator({ req, res, next, schema });
 };

@@ -59,12 +59,12 @@ router.post("/", newBurrowValidate, async (req, res, next) => {
 // get my burrows
 router.get("/", async (req, res, next) => {
   try {
+    console.log(req.body);
     const { _id, role } = req.userInfo;
     const filter = role === "admin" ? null : { userId: _id };
 
     const burrows = (await getAllBurrows(filter)) || [];
 
-    console.log(burrows);
     res.json({
       status: "success",
       message: "",

@@ -51,7 +51,7 @@ bookRouter.get("/all", async (req, res, next) => {
 bookRouter.get("/:_id?", async (req, res, next) => {
   try {
     const { _id } = req.params;
-
+    console.log("params get book", _id, "_id");
     const books = _id
       ? await getABookById(_id)
       : await getAllBooks({ status: "active" });

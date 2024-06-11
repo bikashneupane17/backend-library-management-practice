@@ -1,46 +1,42 @@
 import mongoose from "mongoose";
 
-const reviewSchema = new mongoose.Schema(
-  {
-    status: {
-      type: String,
-      default: "inactive",
-    },
-    bookId: {
-      type: mongoose.Types.ObjectId,
-      required: true,
-    },
-    burrowId: {
-      type: mongoose.Types.ObjectId,
-      required: true,
-    },
-    userId: {
-      type: mongoose.Types.ObjectId,
-      required: true,
-    },
-    userName: {
-      type: String,
-      required: true,
-    },
-    tilte: {
-      type: String,
-      required: true,
-    },
-    ratings: {
-      type: Number,
-      min: 1,
-      max: 5,
-      required: true,
-    },
-
-    message: {
-      type: String,
-      required: true,
-    },
+const reviewSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Types.ObjectId,
+    required: true,
   },
-  {
-    timestamps: true,
-  }
-);
+  userName: {
+    type: String,
+    required: true,
+  },
+  bookId: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+  },
+  bookTitle: {
+    type: String,
+    required: true,
+  },
+  thumbnail: {
+    type: String,
+    required: true,
+  },
+  burrowId: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  message: {
+    type: String,
+    required: true,
+  },
+  ratings: {
+    type: Number,
+    required: true,
+  },
+});
 
-export default mongoose.model("Review", reviewSchema);
+export default mongoose.model("Reviews", reviewSchema);

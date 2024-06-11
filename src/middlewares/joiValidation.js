@@ -93,9 +93,9 @@ export const newReviewValidation = (req, res, next) => {
     burrowId: STRING_REQUIRED,
     message: STRING_REQUIRED,
     ratings: NUMBER_REQUIRED,
-    tilte: STRING_REQUIRED,
+    title: STRING_REQUIRED,
     userId: STRING_REQUIRED,
     userName: STRING_REQUIRED,
   });
-  return joiValidator({ req, res, next, schema });
+  return JoiValidate({ req, res, next, schema });
 };

@@ -3,6 +3,11 @@ import { verifyAccessJWT, verifyRefreshJWT } from "../utils/jwt.js";
 import { findAccessJWTInDb } from "../model/session/SessionModel.js";
 import { getUserByEmail } from "../model/user/UserModel.js";
 
+// // get userInfo
+// export const getUserDetails = email =>{
+//   return
+// }
+
 // authenticate access jwt and send userInfo
 export const auth = async (req, res, next) => {
   try {

@@ -16,7 +16,6 @@ const maxBurrowingDays = 15;
 // create new burrow
 router.post("/", newBurrowValidate, async (req, res, next) => {
   try {
-    console.log(req.userInfo);
     const today = new Date();
     const { _id, firstName } = req.userInfo;
 
@@ -59,7 +58,6 @@ router.post("/", newBurrowValidate, async (req, res, next) => {
 // get my burrows
 router.get("/", async (req, res, next) => {
   try {
-    console.log(req.body);
     const { _id, role } = req.userInfo;
     const filter = role === "admin" ? null : { userId: _id };
 
@@ -77,22 +75,17 @@ router.get("/", async (req, res, next) => {
 
 router.put("/", async (req, res, next) => {
   try {
-    console.log(req.body);
-
     if (!req.body._id || !req.body.bookId) {
       throw new Error("Invalid Data");
     }
 
-    const burrowId = req.body._id;
-    // const { _id } = req.user.Info;
-
-    // udate burrow table
-    const burrow = await updateABurrowById(burrowId, {
+    // update burrow table
+    const burrow = await updateABurrowById(req.body._id, {
       isReturned: true,
       returnedDate: Date(),
     });
 
-    //update book tab;e
+    //update book table
     const book = await updateABookById(req.body.bookId, {
       isAvailable: true,
       expectedAvailable: null,

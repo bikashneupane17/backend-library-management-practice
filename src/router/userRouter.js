@@ -5,14 +5,14 @@ import {
   newUserValidate,
 } from "../middlewares/joiValidation.js";
 import { signAccessJWT, signRefreshJWT } from "../utils/jwt.js";
-
 import express from "express";
+import { auth, jwtAuth } from "../middlewares/auth.js";
 
-const userRouter = express.Router();
+const router = express.Router();
 
 //============================ public controller ============================
 //signup
-userRouter.post("/signup", newUserValidate, async (req, res, next) => {
+router.post("/signup", newUserValidate, async (req, res, next) => {
   try {
     req.body.password = hashPassword(req.body.password);
 
@@ -37,7 +37,7 @@ userRouter.post("/signup", newUserValidate, async (req, res, next) => {
 });
 
 //login
-userRouter.post("/login", loginUserValidate, async (req, res, next) => {
+router.post("/login", loginUserValidate, async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await getUserByEmail(email);
@@ -67,4 +67,34 @@ userRouter.post("/login", loginUserValidate, async (req, res, next) => {
   }
 });
 
-export default userRouter;
+//============================ private controller ============================
+//private login
+//when user have accesToken as a header and server returns a user after authenticating
+router.get("/", auth, (req, res, next) => {
+  try {
+    req.userInfo.refreshJWT = undefined;
+    req.userInfo.__v = undefined;
+
+    res.json({
+      status: "success",
+      message: "User Authenticated",
+      user: req.userInfo,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+//return new access Token when user token is expired and requests new one
+router.get("/new-access", jwtAuth, (req, res, next) => {
+  try {
+    const { email } = req.userInfo;
+    const accessJWT = signAccessJWT({ email });
+
+    res.json({ accessJWT });
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default router;

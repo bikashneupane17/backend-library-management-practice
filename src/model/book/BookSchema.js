@@ -24,7 +24,7 @@ const bookSchema = new mongoose.Schema(
     },
     thumbnail: {
       type: String,
-      default: "",
+      required: true,
     },
     status: {
       type: String,
@@ -32,7 +32,7 @@ const bookSchema = new mongoose.Schema(
     },
     isAvailable: {
       type: Boolean,
-      default: "true",
+      default: true,
     },
     expectedAvailable: {
       type: Date,

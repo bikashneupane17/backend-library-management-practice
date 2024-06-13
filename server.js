@@ -5,7 +5,6 @@ import { connectMongo } from "./src/config/mongoConfig.js";
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
-import privateRouter from "./src/router/privateRouter.js";
 import userRouter from "./src/router/userRouter.js";
 import reviewRouter from "./src/router/reviewRouter.js";
 
@@ -18,7 +17,6 @@ app.use(express.json());
 
 //routes
 app.use("/library/users", userRouter);
-app.use("/library/users/private", privateRouter);
 app.use("/library/books", bookRouter);
 app.use("/library/burrows", auth, burrowRouter);
 app.use("/library/reviews", reviewRouter);

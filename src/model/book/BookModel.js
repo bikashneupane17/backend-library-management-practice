@@ -17,7 +17,6 @@ export const getABookById = (_id) => {
 
 // update book by id
 export const updateABookById = (_id, obj) => {
-  console.log("Book MMM");
   return BookSchema.findByIdAndUpdate(_id, obj);
 };
 

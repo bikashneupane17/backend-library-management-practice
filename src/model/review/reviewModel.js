@@ -7,12 +7,12 @@ export const insertReview = (obj) => {
 
 // get all reviews
 export const getReviews = (filter) => {
-  return ReviewSchema.find({ filter });
+  return ReviewSchema.find(filter);
 };
 
 // edit review by id
 export const editReview = (_id, obj) => {
-  return ReviewSchema.findOneAndReplace({ _id }, { obj }, { new: true });
+  return ReviewSchema.findByIdAndUpdate(_id, obj, { new: true });
 };
 
 //delete review

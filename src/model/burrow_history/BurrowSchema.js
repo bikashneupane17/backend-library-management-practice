@@ -7,13 +7,13 @@ const burrowSchema = new mongoose.Schema(
       ref: "Users",
       required: true,
     },
+    userName: {
+      type: String,
+      required: true,
+    },
     bookId: {
       type: mongoose.Types.ObjectId,
       ref: "Books",
-      required: true,
-    },
-    userName: {
-      type: String,
       required: true,
     },
     bookTitle: {
@@ -27,6 +27,14 @@ const burrowSchema = new mongoose.Schema(
     isReturned: {
       type: Boolean,
       default: false,
+    },
+    dueDate: {
+      type: Date,
+      default: "",
+    },
+    returnedDate: {
+      type: Date,
+      default: "",
     },
   },
   {

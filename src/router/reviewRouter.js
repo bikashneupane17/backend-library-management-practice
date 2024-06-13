@@ -5,6 +5,7 @@ import {
   getReviews,
   insertReview,
 } from "../model/review/reviewModel.js";
+import { newReviewValidation } from "../middlewares/joiValidation.js";
 
 const router = express.Router();
 
@@ -27,6 +28,7 @@ router.get("/all", auth, isAdmin, async (req, res, next) => {
 router.get("/", async (req, res, next) => {
   try {
     const reviews = await getReviews({ status: "active" });
+    console.log(reviews);
     reviews &&
       res.json({
         status: "success",
@@ -39,7 +41,7 @@ router.get("/", async (req, res, next) => {
 });
 
 // insert new review
-router.post("/", auth, async (req, res, next) => {
+router.post("/", auth, newReviewValidation, async (req, res, next) => {
   try {
     const review = await insertReview(req.body);
     review?._id &&
@@ -53,10 +55,10 @@ router.post("/", auth, async (req, res, next) => {
 });
 
 // edit review (put)==> change status
-router.put("/", auth, isAdmin, async (req, res, next) => {
+router.patch("/", auth, isAdmin, async (req, res, next) => {
   try {
-    const { _id, obj } = req.body;
-    const review = await editReview(_id, obj);
+    const { _id, status } = req.body;
+    const review = await editReview(_id, { status });
 
     review?._id
       ? res.json({

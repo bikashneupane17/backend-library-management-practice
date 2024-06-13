@@ -62,7 +62,7 @@ export const newBookValidate = (req, res, next) => {
 export const newBurrowValidate = (req, res, next) => {
   const schema = Joi.object({
     bookId: STRING_REQUIRED,
-    thumbnail: STRING_ALLOWED,
+    thumbnail: STRING_REQUIRED,
     bookTitle: STRING_ALLOWED,
   });
 
@@ -82,7 +82,7 @@ export const updateBookValidation = (req, res, next) => {
     isAvailable: isTRUE,
     expectedAvailable: Joi.date().allow(null, ""),
   });
-  return JoiValidate({ req, res, next, schema });
+  return JoiValidate(schema, req, res, next);
 };
 
 // review validation
@@ -96,6 +96,7 @@ export const newReviewValidation = (req, res, next) => {
     title: STRING_REQUIRED,
     userId: STRING_REQUIRED,
     userName: STRING_REQUIRED,
+    thumbnail: STRING_ALLOWED,
   });
-  return JoiValidate({ req, res, next, schema });
+  return JoiValidate(schema, req, res, next);
 };

@@ -1,5 +1,6 @@
 import { auth, isAdmin } from "../middlewares/auth.js";
 import {
+  deleteABookById,
   getABookById,
   getAllBooks,
   insertBook,
@@ -8,6 +9,7 @@ import {
 
 import express from "express";
 import { newBookValidate } from "../middlewares/joiValidation.js";
+import { updateABurrowById } from "../model/burrow_history/BurrowModel.js";
 
 const bookRouter = express.Router();
 
@@ -51,7 +53,6 @@ bookRouter.get("/all", async (req, res, next) => {
 bookRouter.get("/:_id?", async (req, res, next) => {
   try {
     const { _id } = req.params;
-    console.log("params get book", _id, "_id");
     const books = _id
       ? await getABookById(_id)
       : await getAllBooks({ status: "active" });
@@ -69,16 +70,16 @@ bookRouter.get("/:_id?", async (req, res, next) => {
 bookRouter.put("/", auth, isAdmin, async (req, res, next) => {
   try {
     const { _id, ...rest } = req.body;
+    const update = await updateABookById(_id, rest);
 
-    const editedBook = await updateABookById(_id, rest);
-    editedBook?._id
+    update?._id
       ? res.json({
           status: "success",
-          message: "Book Edited",
+          message: "The book has been updated",
         })
       : res.json({
           status: "error",
-          message: "Book Edit Fail",
+          message: "Unable to update the book, try again later",
         });
   } catch (error) {
     next(error);
@@ -90,9 +91,7 @@ bookRouter.delete("/:_id?", auth, isAdmin, async (req, res, next) => {
   try {
     const { _id } = req.params;
 
-    const deletedBook = await deleteBookById(_id);
-    console.log(_id, result);
-    console.log("first");
+    const deletedBook = await deleteABookById(_id);
 
     deletedBook?._id
       ? res.json({

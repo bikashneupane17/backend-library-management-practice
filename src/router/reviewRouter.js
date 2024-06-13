@@ -28,7 +28,6 @@ router.get("/all", auth, isAdmin, async (req, res, next) => {
 router.get("/", async (req, res, next) => {
   try {
     const reviews = await getReviews({ status: "active" });
-    console.log(reviews);
     reviews &&
       res.json({
         status: "success",

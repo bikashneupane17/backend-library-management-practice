@@ -4,6 +4,10 @@ export const createNewUser = (userObj) => {
   return UserSchema(userObj).save();
 };
 
+export const getAllUsers = () => {
+  return UserSchema.find();
+};
+
 export const getUserByEmail = (email) => {
   return UserSchema.findOne({ email });
 };

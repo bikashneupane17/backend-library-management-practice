@@ -1,12 +1,16 @@
 import { comparePassword, hashPassword } from "../utils/bcrypt.js";
-import { createNewUser, getUserByEmail } from "../model/user/UserModel.js";
+import {
+  createNewUser,
+  getAllUsers,
+  getUserByEmail,
+} from "../model/user/UserModel.js";
 import {
   loginUserValidate,
   newUserValidate,
 } from "../middlewares/joiValidation.js";
 import { signAccessJWT, signRefreshJWT } from "../utils/jwt.js";
 import express from "express";
-import { auth, jwtAuth } from "../middlewares/auth.js";
+import { auth, isAdmin, jwtAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -97,4 +101,18 @@ router.get("/new-access", jwtAuth, (req, res, next) => {
   }
 });
 
+// get all user => admin access only
+router.get("/all", auth, isAdmin, async (req, res, next) => {
+  try {
+    const users = await getAllUsers();
+    users &&
+      res.json({
+        status: "success",
+        message: "",
+        users,
+      });
+  } catch (error) {
+    next(error);
+  }
+});
 export default router;

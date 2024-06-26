@@ -15,3 +15,8 @@ export const getUserByEmail = (email) => {
 export const updateUser = async (filter, obj) => {
   return await UserSchema.findOneAndUpdate(filter, obj, { new: true });
 };
+
+export const deleteUser = (_id) => {
+  console.log(_id);
+  return UserSchema.findByIdAndDelete(_id, { new: true });
+};

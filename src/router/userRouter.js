@@ -1,6 +1,7 @@
 import { comparePassword, hashPassword } from "../utils/bcrypt.js";
 import {
   createNewUser,
+  deleteUser,
   getAllUsers,
   getUserByEmail,
   updateUser,
@@ -124,7 +125,7 @@ router.get("/all", auth, isAdmin, async (req, res, next) => {
 export default router;
 
 //update user
-router.put("/", auth, isAdmin, async (req, res, next) => {
+router.put("/", auth, async (req, res, next) => {
   try {
     const { _id, ...rest } = req.body;
     const user = await updateUser({ _id }, { ...rest });
@@ -138,6 +139,32 @@ router.put("/", auth, isAdmin, async (req, res, next) => {
           status: "error",
           message: "Could not edit user, try again",
         });
+  } catch (error) {
+    next(error);
+  }
+});
+
+//delete user
+router.delete("/:_id?", auth, async (req, res, next) => {
+  try {
+    const { _id } = req.params;
+    if (_id) {
+      const user = await deleteUser(_id);
+
+      return user?._id
+        ? res.json({
+            status: "success",
+            message: "User updated...",
+          })
+        : res.json({
+            status: "error",
+            message: "Could not edit user, try again",
+          });
+    }
+    res.json({
+      status: "error",
+      message: "User Not Found...",
+    });
   } catch (error) {
     next(error);
   }

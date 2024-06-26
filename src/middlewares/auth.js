@@ -3,11 +3,6 @@ import { verifyAccessJWT, verifyRefreshJWT } from "../utils/jwt.js";
 import { findAccessJWTInDb } from "../model/session/SessionModel.js";
 import { getUserByEmail } from "../model/user/UserModel.js";
 
-// // get userInfo
-// export const getUserDetails = email =>{
-//   return
-// }
-
 // authenticate access jwt and send userInfo
 export const auth = async (req, res, next) => {
   try {
@@ -28,9 +23,7 @@ export const auth = async (req, res, next) => {
         //5. if user is present send it as req.userInfo and go to next
         if (user?._id) {
           user.password = undefined;
-
           req.userInfo = user;
-
           return next();
         }
       }
@@ -39,7 +32,7 @@ export const auth = async (req, res, next) => {
     // if  error, send not authorised error 403
     const error = {
       status: 403,
-      message: decoded,
+      message: decoded.message,
     };
 
     next(error);
@@ -65,9 +58,7 @@ export const jwtAuth = async (req, res, next) => {
       // if user is present and the token matches, send new accessToken
       if (user?._id && user.refreshJWT === authorization) {
         user.password = undefined;
-
         req.userInfo = user;
-
         return next();
       }
     }
@@ -75,8 +66,9 @@ export const jwtAuth = async (req, res, next) => {
     // if  error, send not authorised error 403
     const error = {
       statue: 403,
-      message: decoded,
+      message: decoded.message,
     };
+
     next(error);
   } catch (error) {
     next(error);

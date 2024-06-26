@@ -3,6 +3,7 @@ import {
   createNewUser,
   getAllUsers,
   getUserByEmail,
+  updateUser,
 } from "../model/user/UserModel.js";
 import {
   loginUserValidate,
@@ -109,10 +110,35 @@ router.get("/all", auth, isAdmin, async (req, res, next) => {
       res.json({
         status: "success",
         message: "",
-        users,
+        users: users.map((item) => {
+          (item.refreshJWT = undefined),
+            (item.__v = undefined),
+            (item.password = undefined);
+          return item;
+        }),
       });
   } catch (error) {
     next(error);
   }
 });
 export default router;
+
+//update user
+router.put("/", auth, isAdmin, async (req, res, next) => {
+  try {
+    const { _id, ...rest } = req.body;
+    const user = await updateUser({ _id }, { ...rest });
+
+    user?._id
+      ? res.json({
+          status: "success",
+          message: "User updated...",
+        })
+      : res.json({
+          status: "error",
+          message: "Could not edit user, try again",
+        });
+  } catch (error) {
+    next(error);
+  }
+});
